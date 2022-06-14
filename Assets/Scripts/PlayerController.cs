@@ -8,7 +8,10 @@ public class PlayerController : MonoBehaviour
     public Rigidbody2D rb;
     private Animator _anim;
     public Transform groundCheck;
-    
+
+    public int amountOfJumps = 1;
+    private int _amountOfJumpsLeft;
+
     private float _movementInputDirection;
     public float movementSpeed = 10.0f;
     public float jumpForce = 16.0f;
@@ -16,15 +19,17 @@ public class PlayerController : MonoBehaviour
     private bool _isFacingRight;
     private bool _isSwimming;
     private bool _isGrounded;
+    private bool _canJump;
 
     public float groundCheckRadius;
     public LayerMask whatIsGround;
-    
+
     // Start is called before the first frame update
     void Start()
     {
         rb.GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+        _amountOfJumpsLeft = amountOfJumps;
     }
 
     // Update is called once per frame
@@ -33,7 +38,9 @@ public class PlayerController : MonoBehaviour
         CheckInput();
         CheckMovementDirection();
         UpdateAnimations();
+        CheckIfCanJump();
     }
+
 
     private void FixedUpdate()
     {
@@ -50,10 +57,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Jump()
-    {
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-    }
+
 
     private void ApplyMovement()
     {
@@ -86,19 +90,42 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAnimations()
     {
-       _anim.SetBool("isSwimming", _isSwimming);
+        _anim.SetBool("isSwimming", _isSwimming);
+        _anim.SetBool("isGrounded", _isGrounded);
+        _anim.SetFloat("yVelocity", rb.velocity.y);
         // Debug.Log(_anim.GetParameter(0).name);
     }
 
     private void CheckSurroundings()
     {
-    
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
-        Debug.Log(_isGrounded);
+        //  Debug.Log(_isGrounded);
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(groundCheck.position,groundCheckRadius);
+        Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+    }
+
+  
+    private void Jump()
+    {
+        if (_canJump)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            _amountOfJumpsLeft--;
+        }
+    }
+    
+    private void CheckIfCanJump()
+    {
+        if (_isGrounded && rb.velocity.y <= 0)
+        {
+            _amountOfJumpsLeft = amountOfJumps;
+        }
+
+        _canJump = _amountOfJumpsLeft > 0;
+        
+        Debug.Log(_amountOfJumpsLeft);
     }
 }
