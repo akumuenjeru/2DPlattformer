@@ -7,7 +7,12 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rb;
     private Animator _anim;
+
     public Transform groundCheck;
+    public Transform wallCheck;
+
+    public LayerMask whatIsGround;
+
 
     public int amountOfJumps = 1;
     private int _amountOfJumpsLeft;
@@ -17,12 +22,20 @@ public class PlayerController : MonoBehaviour
     public float jumpForce = 16.0f;
 
     private bool _isFacingRight;
+
     private bool _isSwimming;
     private bool _isGrounded;
     private bool _canJump;
+    private bool _isTouchingWall;
+    private bool _isWallSliding;
 
     public float groundCheckRadius;
-    public LayerMask whatIsGround;
+    public float wallCheckDistance;
+    public float wallSlideSpeed;
+    public float movementForceInAir;
+    public float airDragMultiplier = 0.95f;
+    public float variableJumpHeightMultiplier = 0.5f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -39,6 +52,19 @@ public class PlayerController : MonoBehaviour
         CheckMovementDirection();
         UpdateAnimations();
         CheckIfCanJump();
+        CheckIfWallSliding();
+    }
+
+    private void CheckIfWallSliding()
+    {
+        if (_isTouchingWall && !_isGrounded && rb.velocity.y < 0)
+        {
+            _isWallSliding = true;
+        }
+        else
+        {
+            _isWallSliding = false;
+        }
     }
 
 
@@ -55,13 +81,49 @@ public class PlayerController : MonoBehaviour
         {
             Jump();
         }
-    }
 
+        if (Input.GetButtonUp("Jump"))
+        {
+            var velocity = rb.velocity;
+            velocity = new Vector2(velocity.x, velocity.y * variableJumpHeightMultiplier);
+            rb.velocity = velocity;
+        }
+    }
 
 
     private void ApplyMovement()
     {
-        rb.velocity = new Vector2(movementSpeed * _movementInputDirection, rb.velocity.y);
+        if (_isGrounded)
+        {
+            rb.velocity = new Vector2(movementSpeed * _movementInputDirection, rb.velocity.y);
+        }
+        else if (!_isGrounded && !_isWallSliding && _movementInputDirection != 0)
+        {
+            Vector2 forceToAdd = new Vector2(movementForceInAir * _movementInputDirection, 0);
+            rb.AddForce(forceToAdd);
+            if (Mathf.Abs(rb.velocity.x) > movementSpeed)
+            {
+                rb.velocity = new Vector2(movementSpeed * _movementInputDirection, rb.velocity.y);
+            }
+        }
+        else if (!_isGrounded && !_isWallSliding && _movementInputDirection == 0)
+        {
+            var velocity = rb.velocity;
+            velocity = new Vector2(velocity.x * airDragMultiplier, velocity.y);
+            rb.velocity = velocity;
+        }
+
+        {
+        }
+
+
+        if (_isWallSliding)
+        {
+            if (rb.velocity.y < wallSlideSpeed)
+            {
+                rb.velocity = new Vector2(rb.velocity.x, -wallSlideSpeed);
+            }
+        }
     }
 
 
@@ -84,8 +146,11 @@ public class PlayerController : MonoBehaviour
 
     private void Flip()
     {
-        _isFacingRight = !_isFacingRight;
-        transform.Rotate(0.0f, 180.0f, 0.0f);
+        if (!_isWallSliding)
+        {
+            _isFacingRight = !_isFacingRight;
+            transform.Rotate(0.0f, 180.0f, 0.0f);
+        }
     }
 
     private void UpdateAnimations()
@@ -93,30 +158,36 @@ public class PlayerController : MonoBehaviour
         _anim.SetBool("isSwimming", _isSwimming);
         _anim.SetBool("isGrounded", _isGrounded);
         _anim.SetFloat("yVelocity", rb.velocity.y);
+        _anim.SetBool("isWallSliding", _isWallSliding);
         // Debug.Log(_anim.GetParameter(0).name);
     }
 
     private void CheckSurroundings()
     {
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
-        //  Debug.Log(_isGrounded);
+        _isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsGround);
+
+        Debug.Log(_isTouchingWall);
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        var position = wallCheck.position;
+        Gizmos.DrawLine(position, new Vector3(position.x + wallCheckDistance, position.y, position.z));
     }
 
-  
+
     private void Jump()
     {
         if (_canJump)
         {
+          //  rb.AddForce(Physics.gravity * (jumpForce - 1) * rb.mass);
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             _amountOfJumpsLeft--;
         }
     }
-    
+
     private void CheckIfCanJump()
     {
         if (_isGrounded && rb.velocity.y <= 0)
@@ -125,7 +196,7 @@ public class PlayerController : MonoBehaviour
         }
 
         _canJump = _amountOfJumpsLeft > 0;
-        
-        Debug.Log(_amountOfJumpsLeft);
+
+        // Debug.Log(_amountOfJumpsLeft);
     }
 }
