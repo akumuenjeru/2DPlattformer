@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
         _isTouchingWall = Physics2D.Raycast(wallCheck.position, transform.right, wallCheckDistance, whatIsGround);
 
-        Debug.Log(_isTouchingWall);
+        //Debug.Log(_isTouchingWall);
     }
 
     private void OnDrawGizmos()
