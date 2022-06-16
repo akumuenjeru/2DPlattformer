@@ -12,11 +12,11 @@ public class EnemyController : MonoBehaviour
     public float speed = 2f;
     public float radius = 3f;
     
-    public GameObject playerObject;
+    private GameController _gameController;
     
     void Start()
     {
-        playerObject = GameObject.Find("Player");
+        _gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         _initialPosition = gameObject.transform.position;
         _positionA = new Vector3(_initialPosition.x - radius, _initialPosition.y, _initialPosition.z);
         _positionB = new Vector3(_initialPosition.x + radius, _initialPosition.y, _initialPosition.z);
@@ -70,8 +70,7 @@ public class EnemyController : MonoBehaviour
     {
         if (col.gameObject.name == "Player")
         {
-            playerObject.SetActive(false);
-            Debug.Log("GameOver");
+            _gameController.GameOver();
         }
     }
 }
