@@ -5,7 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 55197cfeb9b65a6448a1dbd9181eed5c
+  - enabled: 1
+    path: Assets/Scenes/RiversTestingGround.unity
+    guid: 06bc5f59922d7634da61e2dcd8cf1af1
+  - enabled: 1
+    path: Assets/Scenes/Settings.unity
+    guid: 407b4f07e60309b43931c0b4f2c0c147
+  - enabled: 1
+    path: Assets/Scenes/GameOver.unity
+    guid: 4b3ddfc971c69594d8356d71092e18a2
   m_configObjects: {}

@@ -12,7 +12,6 @@ public class GameController : MonoBehaviour
     private TextMeshProUGUI _timer;
     private TextMeshProUGUI _gameOver;
     private Canvas _settingsCanvas;
-    private AudioSource _mainAudio;
     private AudioSource _buttonClickAudio;
     
     private CollectingPerls _collectingPerls;
@@ -21,10 +20,10 @@ public class GameController : MonoBehaviour
     private Slider _slider;
     private Slider _effectsSlider;
     public AudioMixer mainMixer;
+    private MusicController _musicController;
 
     private void Start()
     {
-        _mainAudio = GetComponent<AudioSource>();
         _player = GameObject.Find("Player");
         _perlTriggers = GameObject.FindGameObjectsWithTag("Perl");
         //handles Perl Count
@@ -44,6 +43,17 @@ public class GameController : MonoBehaviour
         
         _slider = GameObject.Find("MusicSlider").GetComponent<Slider>();
         _effectsSlider = GameObject.Find("EffectsSlider").GetComponent<Slider>();
+
+        _musicController = GameObject.FindWithTag("Music").GetComponent<MusicController>();
+        _musicController.StopMusic();
+
+        if (_musicController != null)
+        {
+            // ReSharper disable once PossibleInvalidOperationException
+            _slider.value = (float)_musicController.GetMusicVolume();
+            // ReSharper disable once PossibleInvalidOperationException
+            _effectsSlider.value = (float)_musicController.GetEffectsVolume();
+        }
 
         //assigns each perl their script and sets up the collection counting system
         foreach (var perl in _perlTriggers)
@@ -89,9 +99,8 @@ public class GameController : MonoBehaviour
         _timer.enabled = false;
         timeLeft = 0;
         _player.SetActive(false);
-        _mainAudio.Stop();
-        _gameOver.enabled = true;
-        Debug.Log("Game Over!");
+        //_mainAudio.Stop();
+        SceneManager.LoadScene("GameOver");
     }
 
     public void Resume()
@@ -103,7 +112,6 @@ public class GameController : MonoBehaviour
 
     public void SetMusicVolume()
     {
-        //_mainAudio.volume = _slider.value;
         mainMixer.SetFloat("MusicVolume", Mathf.Log10(_slider.value) * 20);
     }
 
