@@ -13,7 +13,7 @@ public class EnemyController : MonoBehaviour
     public float radius = 3f;
     
     private GameController _gameController;
-    
+
     void Start()
     {
         _gameController = GameObject.Find("GameManager").GetComponent<GameController>();
@@ -70,7 +70,11 @@ public class EnemyController : MonoBehaviour
     {
         if (col.gameObject.name == "Player")
         {
-            _gameController.GameOver();
+            if(_gameController!=null) _gameController.GameOver();
+            else
+            {
+                Debug.Log("Collided with Enemy. Universal GameOver() method cannot be called. Reason: GameController Script not found.");
+            }
         }
     }
 }
