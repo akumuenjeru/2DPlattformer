@@ -452,7 +452,7 @@ Camera:
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
-  m_FOVAxisMode: 0
+  m_FOVAxisMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
   m_FocalLength: 50
@@ -492,7 +492,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.030007362, y: 0.035754323, z: -10.127903}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 1462454498}
   m_RootOrder: 0
@@ -7803,11 +7803,11 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: 6219b1954a044df48954e54c5d827739, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &1570385321
 SpriteRenderer:
@@ -7922,15 +7922,20 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 256
+  wallHopDirection: {x: 1, y: 0.5}
+  wallJumpDirection: {x: 1, y: 2}
   amountOfJumps: 1
-  movementSpeed: 10
-  jumpForce: 16
+  movementSpeed: 6
+  jumpForce: 9.81
   groundCheckRadius: 0.1
   wallCheckDistance: 0.2
   wallSlideSpeed: 1
-  movementForceInAir: 0
   airDragMultiplier: 0.95
   variableJumpHeightMultiplier: 0.5
+  wallJumpForce: 10
+  jumpTimerSet: 0.15
+  turnTimerSet: 0.1
+  wallJumpTimerSet: 0.5
 --- !u!95 &1570385325
 Animator:
   serializedVersion: 4
