@@ -66,9 +66,9 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D col)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (col.gameObject.name == "Player")
+        if (other.gameObject.name == "Player")
         {
             if(_gameController!=null) _gameController.GameOver();
             else
