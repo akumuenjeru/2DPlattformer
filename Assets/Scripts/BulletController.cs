@@ -4,10 +4,15 @@ public class BulletController : MonoBehaviour
 {
     public Rigidbody2D rb;
     public float speed = 20f;
-    public int damage = 50;
+    public int damage;
     public GameObject impactEffect;
     private GameObject _impactEffectClone;
-    
+
+    public BulletController(int damage)
+    {
+        this.damage = damage;
+    }
+
     void Start()
     {
         rb.velocity = transform.right * speed;
