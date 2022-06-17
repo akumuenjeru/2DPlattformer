@@ -7,6 +7,7 @@ TagManager:
   - Perl
   - Music
   - Enemy
+  - Mine
   layers:
   - Default
   - TransparentFX

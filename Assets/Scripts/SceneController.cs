@@ -19,7 +19,7 @@ public class SceneController : MonoBehaviour
     public void StartGame()
     {
         _buttonSound.Play();
-        SceneManager.LoadScene("Level2");
+        SceneManager.LoadScene("Level1");
     }
 
     public void OpenSettings()

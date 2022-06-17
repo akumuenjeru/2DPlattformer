@@ -5,29 +5,22 @@ public class SeashellController : MonoBehaviour
 {
     public BulletController bulletController;
 
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.name == "Player")
         {
-            bulletController.damage = 100;
-            Destroy(gameObject);
-            
-            RunDelayed(3f,() => bulletController.damage = 50);
+            StartCoroutine(PowerUp());
+            gameObject.GetComponent<Renderer>().enabled = false;
         }
-
-    
     }
 
-
-    private IEnumerator DelayedCoroutine(float delay, System.Action a)
+    IEnumerator PowerUp()
     {
-        yield return new WaitForSeconds(delay);
-        a();
-    }
-
-    private Coroutine RunDelayed(float delay, System.Action a)
-    {
-        return StartCoroutine(DelayedCoroutine(delay, a));
+        bulletController.damage = 100;
+        Debug.Log("5 seconds start now - bullet damage: " + bulletController.damage);
+        yield return new WaitForSeconds(5f);
+        bulletController.damage = 50;
+        Debug.Log("5 seconds over - bullet damage: " + bulletController.damage);
+        Destroy(gameObject);
     }
 }

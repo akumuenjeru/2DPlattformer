@@ -1,23 +1,19 @@
-
-using System.Collections;
 using UnityEngine;
 
 public class MineController : MonoBehaviour
 {
     public GameObject explodingMineEffect;
     private GameObject _explodingMineEffectClone;
-    private GameController _gameController;
 
-    public void Explode()
+    public void Explode(GameObject triggeredMine)
     {
-        _explodingMineEffectClone = Instantiate(explodingMineEffect, transform.position, Quaternion.identity);
-        Destroy(gameObject);
+        Debug.Log("Triggered Mine " + triggeredMine.name);
+        _explodingMineEffectClone = Instantiate(explodingMineEffect, triggeredMine.transform.position, Quaternion.identity);
+        Destroy(triggeredMine);
     }
 
     private void OnDestroy()
     {
         Destroy(_explodingMineEffectClone, 0.5f);
     }
-
-
 }

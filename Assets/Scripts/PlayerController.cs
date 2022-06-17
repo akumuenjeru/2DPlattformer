@@ -65,6 +65,7 @@ public class PlayerController : MonoBehaviour
         _anim = GetComponent<Animator>();
 
         _mineController = GameObject.Find("mine").GetComponent<MineController>();
+        _gameController = GameObject.Find("GameManager").GetComponent<GameController>();
         
         _amountOfJumpsLeft = amountOfJumps;
 
@@ -248,6 +249,7 @@ public class PlayerController : MonoBehaviour
 
         if (_wallJumpTimer > 0)
         {
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (_hasWallJumped && _movementInputDirection == -_lastWallJumpDirection)
             {
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
@@ -322,30 +324,23 @@ public class PlayerController : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(col.name);
-    
-        if (col.name.Equals("StartTimerArea"))
+        if (col.gameObject.CompareTag("Mine"))
         {
-            RunDelayed(3f, _mineController.Explode);
+            StartCoroutine(StartTimer(col.gameObject));
         }
-        else if (col.name.Equals("mine"))
-        {
-            if(_gameController!=null) _gameController.GameOver();
-            else
-            {
-                Debug.Log("Collided with Mine. Universal GameOver() method cannot be called. Reason: GameController Script not found.");
-            }
-        }
-    }
-    
-    private IEnumerator DelayedCoroutine(float delay, System.Action a)
-    {
-        yield return new WaitForSeconds(delay);
-        a();
     }
 
-    private Coroutine RunDelayed(float delay, System.Action a)
+    private IEnumerator StartTimer(GameObject mine)
     {
-        return StartCoroutine(DelayedCoroutine(delay, a));
+        movementSpeed = 0;
+        yield return new WaitForSeconds(1.5f);
+        _mineController.Explode(mine);
+        gameObject.GetComponent<Renderer>().enabled = false;
+        yield return new WaitForSeconds(1f);
+        if(_gameController!=null) _gameController.GameOver();
+        else
+        { 
+            Debug.Log("Collided with Mine. Universal GameOver() method cannot be called. Reason: GameController Script not found.");
+        }
     }
 }

@@ -16,6 +16,5 @@ public class PerlTriggerController : MonoBehaviour
         _collectingPerls.SetPerlCount(_collectingPerls.GetPerlCount()+1);
         _collectingPerls.UpdateText();
         gameObject.SetActive(false);
-        Destroy(this);
     }
 }
