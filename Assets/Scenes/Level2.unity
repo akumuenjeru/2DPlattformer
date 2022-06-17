@@ -17825,7 +17825,7 @@ MonoBehaviour:
   wallHopDirection: {x: 1, y: 0.5}
   wallJumpDirection: {x: 1, y: 2}
   amountOfJumps: 1
-  movementSpeed: 10
+  movementSpeed: 14
   jumpForce: 16
   groundCheckRadius: 0.1
   wallCheckDistance: 3

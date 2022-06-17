@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -9,6 +10,9 @@ public class PlayerController : MonoBehaviour
     public Transform groundCheck;
     public Transform wallCheck;
 
+    private MineController _mineController;
+    private GameController _gameController;
+    
     public LayerMask whatIsGround;
 
     // adjust angle of jump direction
@@ -60,6 +64,8 @@ public class PlayerController : MonoBehaviour
 
         _anim = GetComponent<Animator>();
 
+        _mineController = GameObject.Find("mine").GetComponent<MineController>();
+        
         _amountOfJumpsLeft = amountOfJumps;
 
         wallHopDirection.Normalize();
@@ -246,7 +252,8 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x, 0.0f);
                 _hasWallJumped = false;
-            } else if (_wallJumpTimer <= 0)
+            }
+            else if (_wallJumpTimer <= 0)
             {
                 _hasWallJumped = false;
             }
@@ -310,5 +317,35 @@ public class PlayerController : MonoBehaviour
 
         _canNormalJump = _amountOfJumpsLeft > 0;
         // Debug.Log(_amountOfJumpsLeft);
+    }
+    
+    
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log(col.name);
+    
+        if (col.name.Equals("StartTimerArea"))
+        {
+            RunDelayed(3f, _mineController.Explode);
+        }
+        else if (col.name.Equals("mine"))
+        {
+            if(_gameController!=null) _gameController.GameOver();
+            else
+            {
+                Debug.Log("Collided with Mine. Universal GameOver() method cannot be called. Reason: GameController Script not found.");
+            }
+        }
+    }
+    
+    private IEnumerator DelayedCoroutine(float delay, System.Action a)
+    {
+        yield return new WaitForSeconds(delay);
+        a();
+    }
+
+    private Coroutine RunDelayed(float delay, System.Action a)
+    {
+        return StartCoroutine(DelayedCoroutine(delay, a));
     }
 }
