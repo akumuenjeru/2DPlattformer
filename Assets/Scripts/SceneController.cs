@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    private string _sceneName = "RiversTestingGround";
+    private string _sceneName = "Level1";
     private AudioSource _buttonSound;
     private MusicController _musicController;
 

@@ -17,6 +17,9 @@ public class GameController : MonoBehaviour
     private CollectingPerls _collectingPerls;
 
     public float timeLeft = 30.00f;
+    private float _perlsInLvl1;
+    private float _perlsInLvl2;
+    
     private Slider _slider;
     private Slider _effectsSlider;
     public AudioMixer mainMixer;
@@ -60,6 +63,8 @@ public class GameController : MonoBehaviour
         {
             if (perl == null) continue;
             PerlTriggerController perlScript = perl.GetComponent<PerlTriggerController>();
+            if (perl.transform.parent.name == "Level1") _perlsInLvl1++;
+            if (perl.transform.parent.name == "Level2") _perlsInLvl2++;
             if (perlScript == null) continue;
             perlScript.Setup(_collectingPerls);
         }
@@ -118,5 +123,29 @@ public class GameController : MonoBehaviour
     public void SetEffectsVolume()
     {
         mainMixer.SetFloat("EffectsVolume", Mathf.Log10(_effectsSlider.value) * 20);
+    }
+
+    public bool WinCondition(string objectName)
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        int enemiesAlive = 0;
+        float perlsInCurrent;
+        foreach (GameObject enemy in enemies)
+        {
+            if (enemy.activeSelf)
+            {
+                enemiesAlive++;
+            }
+        }
+
+        perlsInCurrent = objectName == "EndLevel1" ? _perlsInLvl1 : _perlsInLvl2;
+        
+        // ReSharper disable once CompareOfFloatsByEqualityOperator
+        if (_collectingPerls.GetPerlCount() != perlsInCurrent || enemiesAlive > 0)
+        {
+            Debug.Log("Collect all perls and kill all enemies!" + "\n" + "Enemies left: " + enemiesAlive + "\n" + "Perls in scene: " + _perlsInLvl1 + " | Perls collected: " + _collectingPerls.GetPerlCount());
+            return false;
+        }
+        return true;
     }
 }

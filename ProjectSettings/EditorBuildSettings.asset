@@ -9,12 +9,18 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 55197cfeb9b65a6448a1dbd9181eed5c
   - enabled: 1
-    path: Assets/Scenes/RiversTestingGround.unity
-    guid: 06bc5f59922d7634da61e2dcd8cf1af1
-  - enabled: 1
     path: Assets/Scenes/Settings.unity
     guid: 407b4f07e60309b43931c0b4f2c0c147
   - enabled: 1
+    path: Assets/Scenes/Level1.unity
+    guid: 8d240cfb8677b394a9336c91220252e2
+  - enabled: 1
+    path: Assets/Scenes/Level2.unity
+    guid: 06bc5f59922d7634da61e2dcd8cf1af1
+  - enabled: 1
     path: Assets/Scenes/GameOver.unity
     guid: 4b3ddfc971c69594d8356d71092e18a2
+  - enabled: 1
+    path: Assets/Scenes/WinScreen.unity
+    guid: 2b55e685d55f0e24e87bcb4cfcb85f9d
   m_configObjects: {}
