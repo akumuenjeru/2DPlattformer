@@ -25,6 +25,14 @@ public class BulletController : MonoBehaviour
        
     }
 
+    private void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.transform.name == "Plattforms")
+        {
+            Destroy(gameObject);
+        }
+    }
+
     private void OnDestroy()
     {
         Destroy(_impactEffectClone,1f);

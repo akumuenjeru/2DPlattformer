@@ -129,7 +129,6 @@ public class GameController : MonoBehaviour
     {
         GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         int enemiesAlive = 0;
-        float perlsInCurrent;
         foreach (GameObject enemy in enemies)
         {
             if (enemy.activeSelf)
@@ -138,7 +137,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        perlsInCurrent = objectName == "EndLevel1" ? _perlsInLvl1 : _perlsInLvl2;
+        var perlsInCurrent = objectName == "EndLevel1" ? _perlsInLvl1 : _perlsInLvl2;
         
         // ReSharper disable once CompareOfFloatsByEqualityOperator
         if (_collectingPerls.GetPerlCount() != perlsInCurrent || enemiesAlive > 0)

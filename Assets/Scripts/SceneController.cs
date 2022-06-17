@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    private string _sceneName = "Level1";
     private AudioSource _buttonSound;
     private MusicController _musicController;
 
@@ -20,7 +19,7 @@ public class SceneController : MonoBehaviour
     public void StartGame()
     {
         _buttonSound.Play();
-        SceneManager.LoadScene(_sceneName);
+        SceneManager.LoadScene("Level2");
     }
 
     public void OpenSettings()

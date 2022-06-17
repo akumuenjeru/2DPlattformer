@@ -33972,7 +33972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817ce9136fcada04390aed78a0854f43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeft: 90
+  timeLeft: 60
   mainMixer: {fileID: 24100000, guid: 32fa6a21d3a375749b11ff33b98a1cfb, type: 2}
 --- !u!4 &727067806
 Transform:
